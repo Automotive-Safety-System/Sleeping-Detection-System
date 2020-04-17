@@ -1,5 +1,11 @@
 # Sleeping-Detection-System
 
+## Prerequisites
+`` pip install face_recognition ``
+
+you will also need to have [PyTorch](https://pytorch.org/get-started/locally/) installed
+
+
 ## Dataset
 http://mrl.cs.vsb.cz/eyedataset
 
@@ -13,6 +19,6 @@ http://mrl.cs.vsb.cz/eyedataset
 The data will now be separated into `closed` & `open` directories indicating the state of the eyes.
 
 ## Models
-|     Model     |    Accuracy   |
-| ------------- | ------------- |
-|   RESNET18    |      99%      |
+|     Model     |    Accuracy   |     Time      |
+| ------------- | ------------- | ------------- |
+|   RESNET18    |      99%      |      80ms     |
