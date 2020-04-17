@@ -65,3 +65,60 @@ class Face():
             eyes_list.append(np.zeros_like(img))
 
         return eyes_list
+
+
+###############################################################
+# @Function: detect_eyes()                                    #
+# @Returns : 'two lists for the eyes'                         #
+###############################################################
+    def detect_eyes_dlib(self):
+        import face_recognition
+
+        _, img = self.cap.read()
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        cv2.imwrite('temp.jpg', img)
+        img = cv2.imread('temp.jpg')
+
+        face_landmarks_list = face_recognition.face_landmarks(img)
+
+        right_eye = np.zeros_like(img)
+        left_eye = np.zeros_like(img)
+        
+        # check if a face is found
+        if len(face_landmarks_list) > 0:
+
+            x_left = [int(x[0]) for x in face_landmarks_list[0]['left_eye']]
+            y_left = [int(y[1]) for y in face_landmarks_list[0]['left_eye']]
+
+            x_right = [int(x[0]) for x in face_landmarks_list[0]['right_eye']]
+            y_right = [int(y[1]) for y in face_landmarks_list[0]['right_eye']]
+
+
+            if (len(x_left) > 0):
+                x1 = max(x_left)
+                x2 = min(x_left)
+                y1 = max(y_left)
+                y2 = min(y_left)
+                w = x2 - x1
+                h = y2 - y1
+                scale = abs((w - h) // 2)
+                print(scale)
+                left_eye = img[y2 - 2*scale if y2 > 2*scale else y2:y1 + 2*scale, x2-scale:x1+scale]
+
+
+            if (len(x_right) > 0):
+                x1 = max(x_right)
+                x2 = min(x_right)
+                y1 = max(y_right)
+                y2 = min(y_right)
+                w = x2 - x1
+                h = y2 - y1
+                scale = abs((w - h) // 2)
+                right_eye = img[y2 - 2* scale if y2 > 2*scale else y2:y1 + 2*scale, x2-scale:x1+scale]
+
+        else:
+            print('No face found')
+            # TODO
+            ##return 0
+
+        return left_eye, right_eye
